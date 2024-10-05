@@ -166,11 +166,6 @@ export default {
 						}
 					}
 					
-					trojanConfig = trojanConfig + `\r\nproxyIP: ${proxyIP}\r\n`
-							+ `proxyIPs: ${proxyIPs}\r\n`
-							+ `socks5Address: ${socks5Address}\r\n`
-							+ `RproxyIP: ${RproxyIP}\r\n`;
-
 					//console.log(`pagesSum: ${pagesSum}\nworkersSum: ${workersSum}\ntotal: ${total}`);
 					if (userAgent && (userAgent.includes('mozilla') || userAgent.includes('subconverter'))){
 						return new Response(`${trojanConfig}`, {
@@ -739,7 +734,14 @@ async function getTrojanConfig(password, hostName, sub, UA, RproxyIP, _url) {
 			订阅器 += `\nSUB（优选订阅生成器）: ${sub}`;
 		}
 
-		return `
+		let tjConf = `
+################################################################
+
+proxyIP: ${proxyIP}
+proxyIPs: ${proxyIPs}
+socks5Address: ${socks5Address}
+RproxyIP: ${RproxyIP}
+
 ################################################################
 Subscribe / sub 订阅地址, 支持 Base64、clash-meta、sing-box 订阅格式
 ---------------------------------------------------------------
@@ -792,6 +794,7 @@ https://github.com/cmliu/epeius
 ---------------------------------------------------------------
 ################################################################
 `;
+		return tjConf;
 	} else {
 		if (typeof fetch != 'function') {
 			return 'Error: fetch is not available in this environment.';
