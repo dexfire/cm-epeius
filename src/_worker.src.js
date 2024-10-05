@@ -675,6 +675,7 @@ function 配置信息(密码, 域名地址) {
 let subParams = ['sub','base64','b64','clash','singbox','sb','surge'];
 async function getTrojanConfig(password, hostName, sub, UA, RproxyIP, _url) {
 	checkSUB(hostName);
+	addresses.push(hostName);
 	const userAgent = UA.toLowerCase();
 	const Config = 配置信息(password , hostName);
 	const v2ray = Config[0];
