@@ -127,7 +127,7 @@ export default {
 			if (!upgradeHeader || upgradeHeader !== "websocket") {
 				//const url = new URL(request.url);
 				switch (url.pathname) {
-				case '/':
+				case '/cf':
 					const envKey = env.URL302 ? 'URL302' : (env.URL ? 'URL' : null);
 					if (envKey) {
 						const URLs = await ADD(env[envKey]);
