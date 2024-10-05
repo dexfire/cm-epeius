@@ -913,12 +913,11 @@ async function sendMessage(type, ip, add_data = "") {
  */
 
 function subAddresses(host, pw, userAgent, newAddressesapi, newAddressescsv) {
-	addresses = addresses.concat(newAddressesapi);
-	addresses = addresses.concat(newAddressescsv);
-	// 使用Set对象去重
-	const uniqueAddresses = [...new Set(addresses)];
 
-	const responseBody = uniqueAddresses.map(address => {
+	// console.log(`proxyIPs len: ${proxyIPs.length}`);
+	let pid = 0;
+
+	function genTrojanURL(address) {
 		let port = "-1";
 		let addressid = address;
 
@@ -961,7 +960,7 @@ function subAddresses(host, pw, userAgent, newAddressesapi, newAddressescsv) {
 		if (port == "-1") port = "443";
 
 		let 伪装域名 = host ;
-		let 最终路径 = '/?' ;
+		let 最终路径 = `/?pid=${pid}` ;
 		let 节点备注 = '';
 
 		if(proxyhosts.length > 0 && (伪装域名.includes('.workers.dev') || 伪装域名.includes('pages.dev'))) {
@@ -978,7 +977,20 @@ function subAddresses(host, pw, userAgent, newAddressesapi, newAddressescsv) {
 		const trojanLink = `${协议类型}://${密码}@${address}:${port}?security=tls&sni=${伪装域名}&fp=randomized&type=ws&host=${伪装域名}&path=${encodeURIComponent(最终路径)}#${encodeURIComponent(addressid + 节点备注)}`;
 
 		return trojanLink;
-	}).join('\n');
+	}
+
+	addresses = addresses.concat(newAddressesapi);
+	addresses = addresses.concat(newAddressescsv);
+	// 使用Set对象去重
+	const uniqueAddresses = [...new Set(addresses)];
+	let responseBody = '';
+	for(let proxyIP of proxyIPs) {
+		console.log(`pid: ${pid}, proxyIP: ${proxyIP}`);
+		const tjlink = uniqueAddresses.map(genTrojanURL).join('\n');
+		console.log(`tjlink: ${tjlink}`);
+		responseBody += tjlink + '\n';
+		pid++;
+	}
 
 	const base64Response = btoa(responseBody); // 重新进行 Base64 编码
 
