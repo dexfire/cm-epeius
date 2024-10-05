@@ -166,11 +166,10 @@ export default {
 						}
 					}
 					
-					trojanConfig = `proxyIP: ${proxyIP}\r\n`
+					trojanConfig = trojanConfig + `\r\nproxyIP: ${proxyIP}\r\n`
 							+ `proxyIPs: ${proxyIPs.join(', ')}`
 							+ `socks5Address: ${socks5Address}\r\n`
-							+ `RproxyIP: ${RproxyIP}\r\n`
-							+ trojanConfig;
+							+ `RproxyIP: ${RproxyIP}\r\n`;
 
 					//console.log(`pagesSum: ${pagesSum}\nworkersSum: ${workersSum}\ntotal: ${total}`);
 					if (userAgent && (userAgent.includes('mozilla') || userAgent.includes('subconverter'))){
