@@ -167,7 +167,7 @@ export default {
 					}
 					
 					trojanConfig = trojanConfig + `\r\nproxyIP: ${proxyIP}\r\n`
-							+ `proxyIPs: ${proxyIPs.join(', ')}`
+							+ `proxyIPs: ${proxyIPs}\r\n`
 							+ `socks5Address: ${socks5Address}\r\n`
 							+ `RproxyIP: ${RproxyIP}\r\n`;
 
