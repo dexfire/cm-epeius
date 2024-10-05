@@ -52,6 +52,8 @@ let fakeHostName ;
 let proxyIPs ;
 let socks5s;
 let sha224Password ;
+let PID = null;
+
 const expire = 4102329600;//2099-12-31
 const regex = /^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}|\[.*\]):?(\d+)?#?(.*)?$/;
 
@@ -91,6 +93,8 @@ export default {
 
 			sub = env.SUB || sub;
 			subconverter = env.SUBAPI || subconverter;
+			PID = env.PID || PID;
+
 			if( subconverter.includes("http://") ){
 				subconverter = subconverter.split("//")[1];
 				subProtocol = 'http';
@@ -984,12 +988,20 @@ function subAddresses(host, pw, userAgent, newAddressesapi, newAddressescsv) {
 	// 使用Set对象去重
 	const uniqueAddresses = [...new Set(addresses)];
 	let responseBody = '';
-	for(let proxyIP of proxyIPs) {
-		console.log(`pid: ${pid}, proxyIP: ${proxyIP}`);
-		const tjlink = uniqueAddresses.map(genTrojanURL).join('\n');
-		console.log(`tjlink: ${tjlink}`);
-		responseBody += tjlink + '\n';
-		pid++;
+	if (null !== PID)
+	{
+		pid = PID;
+		responseBody = uniqueAddresses.map(genTrojanURL).join('\n');
+	}
+	else
+	{
+		for(let proxyIP of proxyIPs) {
+			console.log(`pid: ${pid}, proxyIP: ${proxyIP}`);
+			const tjlink = uniqueAddresses.map(genTrojanURL).join('\n');
+			console.log(`tjlink: ${tjlink}`);
+			responseBody += tjlink + '\n';
+			pid++;
+		}
 	}
 
 	const base64Response = btoa(responseBody); // 重新进行 Base64 编码
