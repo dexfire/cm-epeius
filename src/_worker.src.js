@@ -990,7 +990,7 @@ function subAddresses(host, pw, userAgent, newAddressesapi, newAddressescsv) {
 	let responseBody = '';
 	if (null !== PID)
 	{
-		pid = PID;
+		pid = PID % proxyIPs.length;
 		responseBody = uniqueAddresses.map(genTrojanURL).join('\n');
 	}
 	else
