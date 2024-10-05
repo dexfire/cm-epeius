@@ -901,12 +901,23 @@ async function sendMessage(type, ip, add_data = "") {
 	}
 }
 
-function subAddresses(host,pw,userAgent,newAddressesapi,newAddressescsv) {
+/**
+ * Generates a Base64-encoded string of unique Trojan links from given addresses.
+ *
+ * @param {string} host - The host name used for the Trojan link.
+ * @param {string} pw - The password used for the Trojan link.
+ * @param {string} userAgent - The user agent string to determine encoding.
+ * @param {Array<string>} newAddressesapi - An array of new addresses from API sources.
+ * @param {Array<string>} newAddressescsv - An array of new addresses from CSV sources.
+ * @returns {string} A Base64-encoded string of unique Trojan links.
+ */
+
+function subAddresses(host, pw, userAgent, newAddressesapi, newAddressescsv) {
 	addresses = addresses.concat(newAddressesapi);
 	addresses = addresses.concat(newAddressescsv);
 	// 使用Set对象去重
 	const uniqueAddresses = [...new Set(addresses)];
-				
+
 	const responseBody = uniqueAddresses.map(address => {
 		let port = "-1";
 		let addressid = address;
@@ -928,7 +939,7 @@ function subAddresses(host,pw,userAgent,newAddressesapi,newAddressescsv) {
 				address = parts[0];
 				addressid = parts[1];
 			}
-		
+
 			if (addressid.includes(':')) {
 				addressid = addressid.split(':')[0];
 			}
@@ -948,17 +959,17 @@ function subAddresses(host,pw,userAgent,newAddressesapi,newAddressescsv) {
 			}
 		}
 		if (port == "-1") port = "443";
-		
+
 		let 伪装域名 = host ;
 		let 最终路径 = '/?' ;
 		let 节点备注 = '';
-		
+
 		if(proxyhosts.length > 0 && (伪装域名.includes('.workers.dev') || 伪装域名.includes('pages.dev'))) {
 			最终路径 = `/${伪装域名}${最终路径}`;
 			伪装域名 = proxyhosts[Math.floor(Math.random() * proxyhosts.length)];
 			节点备注 = ` 已启用临时域名中转服务，请尽快绑定自定义域！`;
 		}
-		
+
 		let 密码 = pw;
 		if (!userAgent.includes('subconverter')) 密码 = encodeURIComponent(pw);
 
