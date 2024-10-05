@@ -10,19 +10,16 @@ let socks5Address = '';
 let addresses = [
 	//当sub为空时启用本地优选域名/优选IP，若不带端口号 TLS默认端口为443，#号后为备注别名
 	// 'Join.my.Telegram.channel.CMLiussss.to.unlock.more.premium.nodes.cf.090227.xyz#加入我的频道t.me/CMLiussss解锁更多优选节点',
-	'cloudflare.com',
+	'burt.ns.cloudflare.com',
 	'www.visa.com',
 	'cis.visa.com',
 	'africa.visa.com',
 	'auth.openai.com',
-	'47.88.15.127:443',
-	'103.99.179.39:443',
 	'104.26.3.86:443',
 	'time.is',
 	'www.wto.org',
 	// 'chatgpt.com:2087',
 	'icook.tw',
-	'104.17.0.0#IPv4',
 	// '[2606:4700::]#IPv6'
 ];
 
