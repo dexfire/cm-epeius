@@ -241,6 +241,7 @@ Commercial support is available at
 				{
 					let pid = parseInt(url.searchParams.get('pid'));
 					proxyIP = proxyIPs[pid % proxyIPs.length] || proxyIP;
+					console.log(`PID: ${pid} ProxyIP: ${proxyIP}`);
 				}
 
 				socks5Address = url.searchParams.get('socks5') || socks5Address;
