@@ -166,10 +166,12 @@ export default {
 						}
 					}
 					
-					trojanConfig = trojanConfig + `proxyIP: ${proxyIP}\r\n`
-							 + `socks5Address: ${socks5Address}\r\n`
-								+ `RproxyIP: ${RproxyIP}\r\n`;
-								
+					trojanConfig = `proxyIP: ${proxyIP}\r\n`
+							+ `proxyIPs: ${proxyIPs.join(', ')}`
+							+ `socks5Address: ${socks5Address}\r\n`
+							+ `RproxyIP: ${RproxyIP}\r\n`
+							+ trojanConfig;
+
 					//console.log(`pagesSum: ${pagesSum}\nworkersSum: ${workersSum}\ntotal: ${total}`);
 					if (userAgent && (userAgent.includes('mozilla') || userAgent.includes('subconverter'))){
 						return new Response(`${trojanConfig}`, {
@@ -192,12 +194,55 @@ export default {
 						});
 					}
 				default:
-					return new Response("Incorrect password!!!", { status: 404 });
+					const nginx_index = `<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+html { color-scheme: light dark; }
+body { width: 35em; margin: 0 auto;
+font-family: Tahoma, Verdana, Arial, sans-serif; }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>`
+					return new Response(nginx_index, {
+						status: 200,
+						headers:{
+							"Content-Type": "text/html; charset=utf-8",
+							"X-Powered-By": "nginx",
+							"X-Content-Type-Options": "nosniff",
+                            "X-XSS-Protection": "1; mode=block",
+                            "Server": "nginx"
+						}
+					});
 				}
 			} else {
 				proxyIP = url.searchParams.get('proxyip') || proxyIP;
-				if (new RegExp('/proxyip=', 'i').test(url.pathname)) proxyIP = url.pathname.toLowerCase().split('/proxyip=')[1];
-				else if (new RegExp('/proxyip.', 'i').test(url.pathname)) proxyIP = `proxyip.${url.pathname.toLowerCase().split("/proxyip.")[1]}`;
+				if (new RegExp('/proxyip=', 'i').test(url.pathname))
+				{
+					proxyIP = url.pathname.toLowerCase().split('/proxyip=')[1];
+				}
+				else if (new RegExp('/proxyip.', 'i').test(url.pathname))
+				{
+					proxyIP = `proxyip.${url.pathname.toLowerCase().split("/proxyip.")[1]}`;
+				}
+				else if (url.searchParams.get('pid'))
+				{
+					let pid = parseInt(url.searchParams.get('pid'));
+					proxyIP = proxyIPs[pid % proxyIPs.length] || proxyIP;
+				}
 
 				socks5Address = url.searchParams.get('socks5') || socks5Address;
 				if (new RegExp('/socks5=', 'i').test(url.pathname)) socks5Address = url.pathname.split('5=')[1];
