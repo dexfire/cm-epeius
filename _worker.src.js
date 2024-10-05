@@ -165,6 +165,11 @@ export default {
 							total = 102400 ;
 						}
 					}
+					
+					trojanConfig = trojanConfig + `proxyIP: ${proxyIP}\r\n`
+							 + `socks5Address: ${socks5Address}\r\n`
+								+ `RproxyIP: ${RproxyIP}\r\n`;
+								
 					//console.log(`pagesSum: ${pagesSum}\nworkersSum: ${workersSum}\ntotal: ${total}`);
 					if (userAgent && (userAgent.includes('mozilla') || userAgent.includes('subconverter'))){
 						return new Response(`${trojanConfig}`, {
